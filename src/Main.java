@@ -1,5 +1,6 @@
 
 
+import gui.MainWindow;
 import tree.Graph;
 import tree.Node;
 
@@ -12,6 +13,8 @@ public class Main
 {
     public static void main(String[] args) {
 
+        MainWindow gui = new MainWindow();
+        gui.setVisible(true);
 //        java.awt.EventQueue.invokeLater(//new Runnable() {
 ////            public void run() {
 ////                try {
@@ -21,10 +24,10 @@ public class Main
 ////                }
 ////            }
 //        });
-        Graph g = new Graph();
-        g.process();
-        g.print();
-        System.out.println(g.getCntNode());
+//        Graph g = new Graph();
+//        g.process();
+//        g.print();
+//        System.out.println(g.getCntNode());
         //System.out.println(Runtime.getRuntime().maxMemory());
 //        int[][] m = new int[4][4];
 //        for(int i=0; i<4; i++){

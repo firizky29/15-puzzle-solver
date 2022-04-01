@@ -38,7 +38,7 @@ public class Graph {
         while(!pq.isEmpty()){
             Node p = pq.remove();
             //p.print();
-            System.out.println(p.depth);
+            //System.out.println(p.depth);
             if(p.isGoal()){
                 to = p;
                 break;
@@ -69,6 +69,10 @@ public class Graph {
 
     public int getCntNode(){
         return this.cntNode;
+    }
+
+    public Node getRoot(){
+        return this.root;
     }
 
 }

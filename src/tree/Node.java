@@ -16,20 +16,20 @@ public class Node {
     public Node(){
         List<Integer> a = new ArrayList();
         a.add(5);
-        a.add(2);
-        a.add(8);
-        a.add(10);
         a.add(1);
-        a.add(11);
-        a.add(6);
-        a.add(4);
-        a.add(7);
-        a.add(9);
-        a.add(16);
         a.add(3);
-        a.add(13);
-        a.add(14);
+        a.add(4);
+        a.add(9);
+        a.add(2);
+        a.add(7);
+        a.add(8);
+        a.add(16);
+        a.add(6);
         a.add(15);
+        a.add(11);
+        a.add(13);
+        a.add(10);
+        a.add(14);
         a.add(12);
 //        for(int i=1; i<=16; i++){
 //            a.add(i);
@@ -91,9 +91,7 @@ public class Node {
                 try{
                     ref = Integer.parseInt(board[i][j]);
                     if(!(1<=ref&&ref<=15)){
-                        ref = 16;
-                        this.r = i;
-                        this.c = j;
+                        throw new NumberFormatException();
                     }
                 } catch(NumberFormatException e){
                     this.r = i;
@@ -175,6 +173,10 @@ public class Node {
             res.add(new Node(board_new, r_new, c_new, depth_new, d, this));
         }
         return res;
+    }
+
+    public int getBoard(int i, int j){
+        return this.board[i][j];
     }
 
     public int[][] getBoard(){
