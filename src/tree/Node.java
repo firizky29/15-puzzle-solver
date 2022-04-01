@@ -9,31 +9,32 @@ public class Node {
     private int r, c;
     private List<Direction> adj;
     private List<Integer> KURANGI;
-    private int depth;
+    public int depth;
+    public Node parent;
 
 
     public Node(){
         List<Integer> a = new ArrayList();
-//        a.add(1);
-//        a.add(2);
-//        a.add(3);
-//        a.add(4);
-//        a.add(5);
-//        a.add(6);
-//        a.add(16);
-//        a.add(8);
-//        a.add(9);
-//        a.add(10);
-//        a.add(7);
-//        a.add(11);
-//        a.add(13);
-//        a.add(14);
-//        a.add(15);
-//        a.add(12);
-        for(int i=1; i<=16; i++){
-            a.add(i);
-        }
-        Collections.shuffle(a);
+        a.add(5);
+        a.add(2);
+        a.add(8);
+        a.add(10);
+        a.add(1);
+        a.add(11);
+        a.add(6);
+        a.add(4);
+        a.add(7);
+        a.add(9);
+        a.add(16);
+        a.add(3);
+        a.add(13);
+        a.add(14);
+        a.add(15);
+        a.add(12);
+//        for(int i=1; i<=16; i++){
+//            a.add(i);
+//        }
+//        Collections.shuffle(a);
         this.board = new int[4][4];
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
@@ -79,12 +80,52 @@ public class Node {
             }
         }
         this.depth = 0;
+        this.parent = null;
     }
 
-    private Node(int[][] board, int r, int c, int depth){
-        this.r = r;
-        this.c = c;
-        this.board = board;
+    public Node(String[][] board){
+        this.board = new int[4][4];
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                int ref;
+                try{
+                    ref = Integer.parseInt(board[i][j]);
+                    if(!(1<=ref&&ref<=15)){
+                        ref = 16;
+                        this.r = i;
+                        this.c = j;
+                    }
+                } catch(NumberFormatException e){
+                    this.r = i;
+                    this.c = j;
+                    ref = 16;
+                }
+                this.board[i][j] = ref;
+            }
+        }
+
+        this.KURANGI = new ArrayList<>();
+        for(int i=0; i<17; i++){
+            this.KURANGI.add(0);
+        }
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                int ref = this.board[i][j];
+                int cur = 0;
+                for(int k=i; k<4; k++){
+                    for(int l=0; l<4; l++){
+                        if(k==i && l<=j){
+                            continue;
+                        }
+                        if(this.board[k][l]<ref){
+                            cur++;
+                        }
+                    }
+                }
+                this.KURANGI.set(ref, cur);
+            }
+        }
+
         this.adj = new ArrayList<>();
         if(this.r != 0){
             this.adj.add(Direction.UP);
@@ -92,13 +133,36 @@ public class Node {
         if(this.r != 3){
             this.adj.add(Direction.DOWN);
         }
-        if(this.c!=0){
+        if(this.c != 0){
             this.adj.add(Direction.LEFT);
         }
-        if(this.c!=3){
+        if(this.c != 3){
+            this.adj.add(Direction.RIGHT);
+        }
+
+        this.depth = 0;
+        this.parent = null;
+    }
+
+    private Node(int[][] board, int r, int c, int depth, Direction d, Node n){
+        this.r = r;
+        this.c = c;
+        this.board = board;
+        this.adj = new ArrayList<>();
+        if(this.r != 0 && !d.equals(Direction.DOWN)){
+            this.adj.add(Direction.UP);
+        }
+        if(this.r != 3 && !d.equals(Direction.UP)){
+            this.adj.add(Direction.DOWN);
+        }
+        if(this.c != 0 && !d.equals(Direction.RIGHT)){
+            this.adj.add(Direction.LEFT);
+        }
+        if(this.c != 3 && !d.equals(Direction.LEFT)){
             this.adj.add(Direction.RIGHT);
         }
         this.depth = depth;
+        this.parent = n;
     }
 
     public List<Node> getAdj(){
@@ -108,9 +172,13 @@ public class Node {
             int c_new = this.c + d.dc;
             int[][] board_new = this.drag(r_new, c_new);
             int depth_new = this.depth + 1;
-            res.add(new Node(board_new, r_new, c_new, depth_new));
+            res.add(new Node(board_new, r_new, c_new, depth_new, d, this));
         }
         return res;
+    }
+
+    public int[][] getBoard(){
+        return this.board;
     }
 
     private int[][] drag(int r_new, int c_new){
@@ -194,7 +262,4 @@ public class Node {
         }
     }
 
-    int hash(){
-        return Arrays.deepHashCode(this.board);
-    }
 }

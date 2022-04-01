@@ -5,10 +5,16 @@ import java.util.*;
 public class Graph {
     private Node root;
     private List<Node> solutionPath;
-    public int cntNode;
+    private int cntNode;
 
     public Graph(){
         this.root = new Node();
+        this.solutionPath = new ArrayList<>();
+        this.cntNode = 1;
+    }
+
+    public Graph(String[][] root_raw){
+        this.root = new Node(root_raw);
         this.solutionPath = new ArrayList<>();
         this.cntNode = 1;
     }
@@ -23,38 +29,35 @@ public class Graph {
         }
 
         PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(Node::getCost));
-        HashMap<Node, Node> parent = new HashMap<>();
-        HashMap<Integer, Boolean> visited = new HashMap<>();
+        //HashMap<Node, Node> parent = new HashMap<>();
+        HashMap<String, Boolean> visited = new HashMap<>();
         Node to = null;
         pq.add(root);
-        parent.put(root, root);
-        visited.put(root.hash(), Boolean.TRUE);
+        //parent.put(root, root);
+        visited.put(Arrays.deepToString(root.getBoard()), Boolean.TRUE);
         while(!pq.isEmpty()){
-            if(this.cntNode>100) {
-                break;
-            }
             Node p = pq.remove();
-            p.print();
-            System.out.println();
+            //p.print();
+            System.out.println(p.depth);
             if(p.isGoal()){
                 to = p;
                 break;
             }
             for(Node u: p.getAdj()){
-                if(visited.containsKey(u.hash())){
+                if(visited.containsKey(Arrays.deepToString(u.getBoard()))){
                     continue;
                 }
                 this.cntNode++;
-                parent.put(u, p);
-                visited.put(u.hash(), Boolean.TRUE);
+                //System.out.println(this.cntNode);
+                //parent.put(u, p);
+                visited.put(Arrays.deepToString(u.getBoard()), Boolean.TRUE);
                 pq.add(u);
             }
         }
-        for(Node u = to; u!=parent.get(u); u=parent.get(u)){
-            this.solutionPath.add(u);
+        for(Node u = to; u.parent!=null; u=u.parent){
+            this.solutionPath.add(0, u);
         }
-        this.solutionPath.add(root);
-        Collections.reverse(this.solutionPath);
+        this.solutionPath.add(0, root);
     }
 
     public void print(){
@@ -62,6 +65,10 @@ public class Graph {
             this.solutionPath.get(i).print();
             System.out.println();
         }
+    }
+
+    public int getCntNode(){
+        return this.cntNode;
     }
 
 }

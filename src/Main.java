@@ -23,7 +23,9 @@ public class Main
 //        });
         Graph g = new Graph();
         g.process();
-        //g.print();
+        g.print();
+        System.out.println(g.getCntNode());
+        //System.out.println(Runtime.getRuntime().maxMemory());
 //        int[][] m = new int[4][4];
 //        for(int i=0; i<4; i++){
 //            for(int j=0; j<4; j++){
@@ -32,6 +34,7 @@ public class Main
 //        }
 //        System.out.println(Arrays.deepToString(m));
 //        Node n = new Node();
+//        n.print();
 //        n.getAdj();
         //g.print();
     }

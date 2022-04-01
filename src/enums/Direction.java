@@ -16,4 +16,8 @@ public enum Direction {
         this.label = label;
     }
 
+    public boolean equals(Direction d){
+        return this.dr==d.dr && this.dc==d.dc && this.label.equals(d.label);
+    }
+
 }
