@@ -16,11 +16,10 @@ Run the program using this command
 ```
 .\bin\artifacts\15-puzzle-solver.jar
 ```
-!(.\resource\GUI Analysis Window.PNG)
 
-!(https://ibb.co/pPDGGCL)
+![GUI Main Windows](https://user-images.githubusercontent.com/88244714/161386019-2bd93172-afbb-4c5f-97f3-c9574b39076a.PNG)
+![GUI Analysis Window](https://user-images.githubusercontent.com/88244714/161386014-1a5820bc-46a2-473c-93fa-363bc303fc0d.PNG)
 
-!(https://ibb.co/R4F70Hx)
 
 
 
