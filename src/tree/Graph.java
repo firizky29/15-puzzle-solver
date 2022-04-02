@@ -3,13 +3,14 @@ package tree;
 import java.util.*;
 
 public class Graph {
-    private Node root;
-    private List<Node> solutionPath;
-    private int cntNode;
-    public String status;
-    private List<Integer> KURANGI;
+    private Node root; // root state of the graph
+    private List<Node> solutionPath; // solution path
+    private int cntNode; // number of nodes generated
+    public String status; // status of processed graph
+    private List<Integer> KURANGI; // KURANGI List
 
     public Graph(boolean randomize){
+        // Random Graph Constructor
         this.root = new Node(randomize);
         this.solutionPath = new ArrayList<>();
         this.cntNode = 1;
@@ -37,6 +38,7 @@ public class Graph {
     }
 
     public Graph(String[][] root_raw){
+        // Input-based graph constructor
         this.root = new Node(root_raw);
         this.solutionPath = new ArrayList<>();
         this.cntNode = 1;
@@ -63,11 +65,8 @@ public class Graph {
         }
     }
 
-    public List<Node> getSolutionPath() {
-        return solutionPath;
-    }
-
     public void process(){
+        // B&B process
         long time = System.nanoTime();
         if(!isReachableGoal()){
             this.status = "Goal is not reachable";
@@ -75,16 +74,12 @@ public class Graph {
         }
 
         PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(Node::getCost));
-        //HashMap<Node, Node> parent = new HashMap<>();
         HashMap<String, Boolean> visited = new HashMap<>();
         Node to = null;
         pq.add(root);
-        //parent.put(root, root);
         visited.put(Arrays.deepToString(root.getBoard()), Boolean.TRUE);
         while(!pq.isEmpty()){
             Node p = pq.remove();
-            //p.print();
-            //System.out.println(p.depth);
             if(p.isGoal()){
                 to = p;
                 break;
@@ -94,8 +89,6 @@ public class Graph {
                     continue;
                 }
                 this.cntNode++;
-                //System.out.println(this.cntNode);
-                //parent.put(u, p);
                 visited.put(Arrays.deepToString(u.getBoard()), Boolean.TRUE);
                 pq.add(u);
             }
@@ -110,29 +103,26 @@ public class Graph {
     }
 
 
+    // getter
+    public List<Node> getSolutionPath() {
+        return this.solutionPath;
+    }
+
     public List<Integer> getKURANGI(){
         return this.KURANGI;
     }
     public int getSumKURANGI(){
+        // sum
         return this.KURANGI.stream().reduce(0, (x, y)->x+y);
     }
 
     public int getReachableCost(){
+        // sum + x
         return this.getSumKURANGI()+(root.getR()+root.getC())%2;
     }
 
-    private boolean isReachableGoal(){
-        return (this.getReachableCost()%2==0);
-    }
-
-    public void print(){
-        for(int i=0; i<this.solutionPath.size(); i++){
-            this.solutionPath.get(i).print();
-            System.out.println();
-        }
-    }
-
     public Object[][] getRowContent(){
+        // content of KURANGI list
         Object[][] data = new Object[18][2];
         for(int i=1; i<=16; i++){
             data[i-1][0] = Integer.toString(i);
@@ -145,9 +135,21 @@ public class Graph {
         return data;
     }
 
-
     public Node getRoot(){
         return this.root;
+    }
+
+    // predicate
+    private boolean isReachableGoal(){
+        return (this.getReachableCost()%2==0);
+    }
+
+    // helper
+    public void print(){
+        for(int i=0; i<this.solutionPath.size(); i++){
+            this.solutionPath.get(i).print();
+            System.out.println();
+        }
     }
 
 

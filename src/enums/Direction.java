@@ -1,6 +1,7 @@
 package enums;
 
 public enum Direction {
+    // Direction enumeration and its displacement
     UP(-1, 0, "UP"),
     DOWN(1, 0, "DOWN"),
     RIGHT(0, 1, "RIGHT"),

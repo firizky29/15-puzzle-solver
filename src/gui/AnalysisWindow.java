@@ -4,15 +4,14 @@ package gui;
 import tree.Graph;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.util.Formatter;
-import java.util.Scanner;
 
-public class AnalysisWindows extends JFrame {
+
+public class AnalysisWindow extends JFrame {
     protected JPanel tablePanel, rootPanel, tablePane;
     protected JButton exportButton;
     protected JFileChooser exportWindows;
@@ -31,19 +30,19 @@ public class AnalysisWindows extends JFrame {
     }
 
 
-    public AnalysisWindows(Graph g){
+    public AnalysisWindow(Graph g){
+        // it is a windows showing heuristics analysis after the tree has been processed
         this.tiles = new JLabel[16];
         this.setResizable(false);
         this.setLayout(new GridBagLayout());
         this.g = g;
 
-
+        // root panel and its component
         this.rootPanel = new JPanel();
         this.rootPanel.setBackground(Color.decode("#fafafa"));
         this.rootPanel.setLayout(new GridBagLayout());
         this.rootPanel.setPreferredSize(new Dimension(350, 390));
         this.rootPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
 
         this.root = new JLabel("Initial Position: ");
         this.root.setPreferredSize(new Dimension(350, 35));
@@ -86,7 +85,7 @@ public class AnalysisWindows extends JFrame {
             }
         }
 
-
+        // table panel and its component
         this.tablePanel = new JPanel();
         this.tablePanel.setBackground(Color.decode("#fafafa"));
         this.tablePanel.setLayout(new GridBagLayout());
@@ -98,6 +97,11 @@ public class AnalysisWindows extends JFrame {
         this.status = new JLabel(g.status);
         this.status.setPreferredSize(new Dimension(150, 35));
 
+        this.exportButton = new JButton("Export");
+        createButton(exportButton);
+
+
+        // tablepane and its component
         this.tablePane = new JPanel();
         this.tablePane.setLayout(new BorderLayout());
         this.tablePane.setPreferredSize(new Dimension(200, 320));
@@ -105,12 +109,9 @@ public class AnalysisWindows extends JFrame {
         String[] column = {"i", "KURANGI[i]"};
         this.analysisTable = new JTable(g.getRowContent(), column);
 
-
         this.tablePane.add(analysisTable, BorderLayout.CENTER);
         this.tablePane.add(analysisTable.getTableHeader(), BorderLayout.NORTH);
 
-        this.exportButton = new JButton("Export");
-        createButton(exportButton);
 
 
         GridBagConstraints tableConstraint = new GridBagConstraints();
@@ -139,7 +140,7 @@ public class AnalysisWindows extends JFrame {
 
 
 
-
+        // panel placement
         GridBagConstraints containerConstraint = new GridBagConstraints();
         containerConstraint.gridx = 0;
         containerConstraint.gridy = 0;
@@ -156,6 +157,10 @@ public class AnalysisWindows extends JFrame {
         this.setTitle("Analysis");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+
+        // button action
+
+        // export button: to write output into text file
         this.exportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -173,7 +178,7 @@ public class AnalysisWindows extends JFrame {
     }
 
     public void exportOutput(String path){
-        File file = new File(path);
+        // writing output
         try {
             FileWriter fstream = new FileWriter(path);
             BufferedWriter out = new BufferedWriter(fstream);

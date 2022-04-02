@@ -1,11 +1,8 @@
 package gui;
 
-import com.sun.tools.javac.Main;
 import tree.*;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
@@ -13,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -40,7 +36,7 @@ public class MainWindow extends JFrame {
 
 
     public MainWindow(){
-
+        // GUI Main Window
         this.tiles = new JButton[16];
         this.setResizable(false);
         this.setLayout(new GridBagLayout());
@@ -74,6 +70,7 @@ public class MainWindow extends JFrame {
             }
         }
 
+        // panelNav and its component
         this.panelNav = new JPanel();
         this.panelNav.setBackground(Color.decode("#fafafa"));
         this.panelNav.setLayout(new GridBagLayout());
@@ -81,7 +78,8 @@ public class MainWindow extends JFrame {
         this.panelNav.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
 
-
+        // component initialization
+        // button
         this.solveButton = new JButton("Solve");
         createButton(solveButton);
 
@@ -104,7 +102,7 @@ public class MainWindow extends JFrame {
         this.resetButton.setVisible(false);
 
 
-
+        // text
         this.pathIn = new JTextField();
         this.pathIn.setPreferredSize(new Dimension(200, 35));
         this.pathIn.setFont(new Font("Gill Sans", Font.PLAIN, 16));
@@ -114,6 +112,7 @@ public class MainWindow extends JFrame {
         this.inputText.setPreferredSize(new Dimension(250, 300));
         this.inputText.setFont(new Font("Gill Sans", Font.PLAIN, 30));
 
+        // label
         this.createStatus = new JLabel();
         this.createStatus.setForeground(Color.RED);
         this.outStatus = new JLabel();
@@ -125,6 +124,7 @@ public class MainWindow extends JFrame {
         output.setFont(new Font("Gill Sans", Font.BOLD, 14));
 
 
+        // Component placement
 
         GridBagConstraints navConstraint = new GridBagConstraints();
         navConstraint.insets = new Insets(5, 5, 5, 5);
@@ -198,6 +198,7 @@ public class MainWindow extends JFrame {
         this.panelNav.add(analysisButton, navConstraint);
 
 
+        // Panel Placement
         GridBagConstraints containerConstraint = new GridBagConstraints();
         containerConstraint.gridx = 1;
         containerConstraint.gridy = 0;
@@ -215,7 +216,8 @@ public class MainWindow extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
-
+        // Button Action
+        // random button: to generate a matrix with random manner
         this.randomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -225,6 +227,7 @@ public class MainWindow extends JFrame {
             }
         });
 
+        // solve button: to solve current matrix
         this.solveButton.addActionListener(new ActionListener() {
             public int idx;
             @Override
@@ -252,6 +255,8 @@ public class MainWindow extends JFrame {
                 }).start();
             }
         });
+
+        // import button: to read input from file text
         this.importButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -276,6 +281,7 @@ public class MainWindow extends JFrame {
             }
         });
 
+        // create button: to read input from current text box to actual boards
         this.createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -283,22 +289,23 @@ public class MainWindow extends JFrame {
                 try{
                     parseInput();
                     drawBoard(tree.getRoot());
-                } catch(BadLocationException e1){
-                    createStatus.setText("Input format is invalid!");
-                } catch (IndexOutOfBoundsException e1){
+                } catch(BadLocationException | IndexOutOfBoundsException e1){
                     createStatus.setText("Input format is invalid!");
                 }
             }
         });
 
+
+        // analysis button: to open up analysis window
         this.analysisButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                AnalysisWindows analysisWindows = new AnalysisWindows(tree);
-                analysisWindows.setVisible(true);
+                AnalysisWindow analysisWindow = new AnalysisWindow(tree);
+                analysisWindow.setVisible(true);
             }
         });
 
+        // reset button: to reset solved state to its root
         this.resetButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -313,6 +320,7 @@ public class MainWindow extends JFrame {
     }
 
     public void drawBoard(Node n){
+        // draw current GUI board with state n
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
                 if(n.getBoard(i, j)==16){
@@ -330,6 +338,7 @@ public class MainWindow extends JFrame {
     }
 
     public void currentTree(){
+        // converting GUI board into node object
         String[][] raw = new String[4][4];
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
@@ -346,6 +355,7 @@ public class MainWindow extends JFrame {
     }
 
     public void parseInput() throws BadLocationException {
+        // reading input and place it into a text box to soon be processed
         int lineCount = inputText.getLineCount();
         if(lineCount<4){
             throw new ArrayIndexOutOfBoundsException();
@@ -376,6 +386,7 @@ public class MainWindow extends JFrame {
 
 
     public void reset(){
+        // revert all component that is just temporary
         analysisButton.setVisible(false);
         resetButton.setVisible(false);
         outStatus.setText("");
