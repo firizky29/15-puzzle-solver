@@ -177,7 +177,7 @@ public class AnalysisWindows extends JFrame {
         try {
             FileWriter fstream = new FileWriter(path);
             BufferedWriter out = new BufferedWriter(fstream);
-            out.write("INITIAL POSITION");
+            out.write("INITIAL POSITION:");
             out.newLine();
             for(int i=0; i<4; i++){
                 for(int j=0; j<4; j++){
@@ -185,7 +185,6 @@ public class AnalysisWindows extends JFrame {
                 }
                 out.newLine();
             }
-            out.newLine();
             out.newLine();
 
             out.write("KURANGI TABLE: ");
@@ -218,6 +217,11 @@ public class AnalysisWindows extends JFrame {
                 out.newLine();
                 out.newLine();
             }
+            if(g.getSolutionPath().size()==0){
+                out.write("No Solution Path Exist");
+                out.newLine();
+            }
+            out.newLine();
 
             out.write("STATUS: ");
             out.newLine();
