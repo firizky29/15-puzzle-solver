@@ -235,7 +235,6 @@ public class MainWindow extends JFrame {
                 idx = 0;
                 reset();
                 currentTree();
-                System.out.println(Arrays.deepToString(tree.getRoot().getBoard()));
                 if(tree.getSolutionPath().size()==0){
                     tree.process();
                 }
