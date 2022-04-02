@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="15-puzzle-solver:jar">
+    <output-path>$PROJECT_DIR$/bin/artifacts</output-path>
+    <root id="archive" name="15-puzzle-solver.jar">
+      <element id="module-output" name="15-puzzle-solver" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>
