@@ -3,6 +3,7 @@ package gui;
 import tree.*;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import java.awt.*;
@@ -10,8 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class MainWindow extends JFrame {
@@ -380,6 +380,21 @@ public class MainWindow extends JFrame {
                 }
             }
             this.tree = new Graph(raw_inp);
+            int[][] raw_boards = tree.getRoot().getBoard();
+            Graph dummy_tree = new Graph(false);
+            int[][] dummy_boards = dummy_tree.getRoot().getBoard();
+            java.util.List<Integer> a = new ArrayList<>();
+            java.util.List<Integer> b = new ArrayList<>();
+            for(int i=0; i<4; i++){
+                for(int j=0; j<4; j++){
+                    a.add(raw_boards[i][j]);
+                    b.add(dummy_boards[i][j]);
+                }
+            }
+            Collections.sort(a);
+            if(!Objects.equals(a.toString(), b.toString())){
+                throw new ArrayIndexOutOfBoundsException();
+            }
         }
     }
 
