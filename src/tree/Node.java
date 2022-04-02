@@ -8,33 +8,20 @@ public class Node {
     private int[][] board;
     private int r, c;
     private List<Direction> adj;
-    private List<Integer> KURANGI;
+
     public int depth;
     public Node parent;
+    public String direction;
 
 
-    public Node(){
+    public Node(boolean randomize){
         List<Integer> a = new ArrayList();
-        a.add(5);
-        a.add(1);
-        a.add(3);
-        a.add(4);
-        a.add(9);
-        a.add(2);
-        a.add(7);
-        a.add(8);
-        a.add(16);
-        a.add(6);
-        a.add(15);
-        a.add(11);
-        a.add(13);
-        a.add(10);
-        a.add(14);
-        a.add(12);
-//        for(int i=1; i<=16; i++){
-//            a.add(i);
-//        }
-//        Collections.shuffle(a);
+        for(int i=1; i<=16; i++){
+            a.add(i);
+        }
+        if(randomize){
+            Collections.shuffle(a);
+        }
         this.board = new int[4][4];
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
@@ -58,29 +45,10 @@ public class Node {
         if(this.c != 3){
             this.adj.add(Direction.RIGHT);
         }
-        this.KURANGI = new ArrayList<>();
-        for(int i=0; i<17; i++){
-            this.KURANGI.add(0);
-        }
-        for(int i=0; i<4; i++){
-            for(int j=0; j<4; j++){
-                int ref = this.board[i][j];
-                int cur = 0;
-                for(int k=i; k<4; k++){
-                    for(int l=0; l<4; l++){
-                        if(k==i && l<=j){
-                            continue;
-                        }
-                        if(this.board[k][l]<ref){
-                            cur++;
-                        }
-                    }
-                }
-                this.KURANGI.set(ref, cur);
-            }
-        }
+
         this.depth = 0;
         this.parent = null;
+        this.direction = "-";
     }
 
     public Node(String[][] board){
@@ -102,28 +70,6 @@ public class Node {
             }
         }
 
-        this.KURANGI = new ArrayList<>();
-        for(int i=0; i<17; i++){
-            this.KURANGI.add(0);
-        }
-        for(int i=0; i<4; i++){
-            for(int j=0; j<4; j++){
-                int ref = this.board[i][j];
-                int cur = 0;
-                for(int k=i; k<4; k++){
-                    for(int l=0; l<4; l++){
-                        if(k==i && l<=j){
-                            continue;
-                        }
-                        if(this.board[k][l]<ref){
-                            cur++;
-                        }
-                    }
-                }
-                this.KURANGI.set(ref, cur);
-            }
-        }
-
         this.adj = new ArrayList<>();
         if(this.r != 0){
             this.adj.add(Direction.UP);
@@ -140,6 +86,7 @@ public class Node {
 
         this.depth = 0;
         this.parent = null;
+        this.direction = "-";
     }
 
     private Node(int[][] board, int r, int c, int depth, Direction d, Node n){
@@ -161,6 +108,7 @@ public class Node {
         }
         this.depth = depth;
         this.parent = n;
+        this.direction = d.label;
     }
 
     public List<Node> getAdj(){
@@ -194,21 +142,8 @@ public class Node {
         return board_new;
     }
 
-    public List<Integer> getKURANGI(){
-        return this.KURANGI;
-    }
 
-    public int getSumKURANGI(){
-        return this.KURANGI.stream().reduce(0, (x, y)->x+y);
-    }
 
-    public int getReachableCost(){
-        return this.getSumKURANGI()+(this.r+this.c)%2;
-    }
-
-    public boolean isReachableGoal(){
-        return (this.getReachableCost()%2==0);
-    }
 
     public boolean isGoal(){
         boolean res = true;
@@ -239,19 +174,25 @@ public class Node {
         return cost+g;
     }
 
+    public int getR(){
+        return this.r;
+    }
+
+    public int getC(){
+        return this.c;
+    }
     public Node clone(){
-        Node res = new Node();
+        Node res = new Node(false);
         res.r = this.r;
         res.c = this.c;
         res.board = this.board.clone();
         for(int i=0; i<4; i++){
             res.board[i] = res.board[i].clone();
         }
-        res.KURANGI = new ArrayList<>();
-        res.KURANGI.addAll(this.KURANGI);
         res.adj = new ArrayList<>();
         res.adj.addAll(this.adj);
         res.depth = this.depth;
+        res.direction = this.direction;
         return res;
     }
 

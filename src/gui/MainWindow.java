@@ -19,19 +19,28 @@ import java.util.Scanner;
 
 
 public class MainWindow extends JFrame {
-    private JButton[] tiles;
-    private JButton solveButton, randomButton, importButton, createButton;
-    private JLabel outStatus, createStatus;
-    private JFileChooser inputWindows;
-    private JPanel panelOut, panelNav;
-    private JTextField pathIn;
-    private JTextArea inputText;
-    private Graph tree;
+    protected JButton[] tiles;
+    protected JButton solveButton, randomButton, importButton, createButton, analysisButton, resetButton;
+    protected JLabel outStatus, createStatus, input, output;
+    protected JFileChooser inputWindows;
+    protected JPanel panelOut, panelNav;
+    protected JTextField pathIn;
+    protected JTextArea inputText;
+    protected Graph tree;
 
+
+    private void createButton(JButton button){
+        button.setPreferredSize(new Dimension(100, 35));
+        button.setFocusable(false);
+        button.setBackground(Color.decode("#4DB4D7"));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Gill Sans", Font.PLAIN, 12));
+    }
 
 
 
     public MainWindow(){
+
         this.tiles = new JButton[16];
         this.setResizable(false);
         this.setLayout(new GridBagLayout());
@@ -39,7 +48,7 @@ public class MainWindow extends JFrame {
 
         // panelOut and its component
         this.panelOut = new JPanel();
-        this.panelOut.setBackground(Color.WHITE);
+        this.panelOut.setBackground(Color.decode("#fafafa"));
         this.panelOut.setLayout(new GridBagLayout());
         this.panelOut.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         GridBagConstraints outConstraint = new GridBagConstraints();
@@ -66,7 +75,7 @@ public class MainWindow extends JFrame {
         }
 
         this.panelNav = new JPanel();
-        this.panelNav.setBackground(Color.YELLOW);
+        this.panelNav.setBackground(Color.decode("#fafafa"));
         this.panelNav.setLayout(new GridBagLayout());
         this.panelNav.setPreferredSize(new Dimension(300, 700));
         this.panelNav.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -74,34 +83,47 @@ public class MainWindow extends JFrame {
 
 
         this.solveButton = new JButton("Solve");
-        this.solveButton.setPreferredSize(new Dimension(100, 35));
-        this.solveButton.setFocusable(false);
-
+        createButton(solveButton);
 
         this.randomButton = new JButton("Randomize");
-        this.randomButton.setPreferredSize(new Dimension(100, 35));
-        this.randomButton.setFocusable(false);
-
+        createButton(randomButton);
 
         this.importButton = new JButton("Import");
-        this.importButton.setPreferredSize(new Dimension(100, 35));
-        this.importButton.setFocusable(false);
-
+        createButton(importButton);
 
         this.createButton = new JButton("Create");
-        this.createButton.setPreferredSize(new Dimension(100, 35));
-        this.createButton.setFocusable(false);
+        createButton(createButton);
+
+        this.analysisButton = new JButton("See Analysis");
+        createButton(analysisButton);
+        this.analysisButton.setPreferredSize(new Dimension(160, 35));
+        this.analysisButton.setVisible(false);
+
+        this.resetButton = new JButton("Reset");
+        createButton(resetButton);
+        this.resetButton.setVisible(false);
 
 
 
         this.pathIn = new JTextField();
         this.pathIn.setPreferredSize(new Dimension(200, 35));
+        this.pathIn.setFont(new Font("Gill Sans", Font.PLAIN, 16));
 
         this.inputText = new JTextArea();
+        this.inputText.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), BorderFactory.createEmptyBorder(1,1,1,1)));
         this.inputText.setPreferredSize(new Dimension(250, 300));
+        this.inputText.setFont(new Font("Gill Sans", Font.PLAIN, 30));
 
         this.createStatus = new JLabel();
+        this.createStatus.setForeground(Color.RED);
         this.outStatus = new JLabel();
+
+        this.input = new JLabel("Input: ");
+        input.setFont(new Font("Gill Sans", Font.BOLD, 14));
+
+        this.output = new JLabel("Output: ");
+        output.setFont(new Font("Gill Sans", Font.BOLD, 14));
+
 
 
         GridBagConstraints navConstraint = new GridBagConstraints();
@@ -109,50 +131,71 @@ public class MainWindow extends JFrame {
 
         navConstraint.gridx = 0;
         navConstraint.gridy = 0;
+        navConstraint.gridwidth = 2;
         navConstraint.anchor = GridBagConstraints.LINE_START;
+        this.panelNav.add(input, navConstraint);
+
+        navConstraint.gridx = 0;
+        navConstraint.gridy = 1;
+        navConstraint.gridwidth = 1;
         this.panelNav.add(importButton, navConstraint);
 
         navConstraint.gridx = 1;
-        navConstraint.gridy = 0;
+        navConstraint.gridy = 1;
+        navConstraint.gridwidth = 2;
         navConstraint.anchor = GridBagConstraints.LINE_END;
         this.panelNav.add(pathIn, navConstraint);
 
         navConstraint.gridx = 0;
-        navConstraint.gridy = 1;
-        navConstraint.gridwidth = 2;
+        navConstraint.gridy = 2;
+        navConstraint.gridwidth = 3;
         navConstraint.fill = GridBagConstraints.HORIZONTAL;
         this.panelNav.add(inputText, navConstraint);
 
         navConstraint.gridx = 0;
-        navConstraint.gridy = 2;
+        navConstraint.gridy = 3;
         navConstraint.gridwidth = 1;
         navConstraint.fill = GridBagConstraints.NONE;
         navConstraint.anchor = GridBagConstraints.LINE_START;
         this.panelNav.add(createStatus, navConstraint);
 
-        navConstraint.gridx = 1;
-        navConstraint.gridy = 2;
+        navConstraint.gridx = 2;
+        navConstraint.gridy = 3;
         navConstraint.anchor = GridBagConstraints.LINE_END;
         this.panelNav.add(createButton, navConstraint);
 
 
-
         navConstraint.gridx = 0;
-        navConstraint.gridy = 3;
+        navConstraint.gridy = 4;
         navConstraint.anchor = GridBagConstraints.LINE_START;
+        this.panelNav.add(randomButton, navConstraint);
+
+        navConstraint.gridx = 2;
+        navConstraint.gridy = 4;
+        navConstraint.anchor = GridBagConstraints.LINE_END;
         this.panelNav.add(solveButton, navConstraint);
 
         navConstraint.gridx = 1;
-        navConstraint.gridy = 3;
-        navConstraint.anchor = GridBagConstraints.LINE_END;
-        this.panelNav.add(randomButton, navConstraint);
-
+        navConstraint.gridy = 4;
+        navConstraint.anchor = GridBagConstraints.CENTER;
+        navConstraint.gridheight = 1;
+        this.panelNav.add(resetButton, navConstraint);
 
         navConstraint.gridx = 0;
-        navConstraint.gridy = 4;
+        navConstraint.gridy = 5;
         navConstraint.fill = GridBagConstraints.HORIZONTAL;
-        navConstraint.gridwidth = 2;
+        navConstraint.gridwidth = 3;
+        this.panelNav.add(output, navConstraint);
+
+
+        navConstraint.gridy = 6;
+        navConstraint.fill = GridBagConstraints.HORIZONTAL;
+        navConstraint.gridheight = 2;
         this.panelNav.add(outStatus, navConstraint);
+
+        navConstraint.gridy = 8;
+        navConstraint.gridwidth = 2;
+        this.panelNav.add(analysisButton, navConstraint);
 
 
         GridBagConstraints containerConstraint = new GridBagConstraints();
@@ -176,7 +219,8 @@ public class MainWindow extends JFrame {
         this.randomButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tree = new Graph();
+                reset();
+                tree = new Graph(true);
                 MainWindow.this.drawBoard(tree.getRoot());
             }
         });
@@ -186,6 +230,7 @@ public class MainWindow extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 idx = 0;
+                reset();
                 currentTree();
                 System.out.println(Arrays.deepToString(tree.getRoot().getBoard()));
                 if(tree.getSolutionPath().size()==0){
@@ -195,6 +240,9 @@ public class MainWindow extends JFrame {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if(idx >= tree.getSolutionPath().size()){
+                            outStatus.setText(tree.status);
+                            analysisButton.setVisible(true);
+                            resetButton.setVisible(true);
                             ((Timer)e.getSource()).stop();
                             return;
                         }
@@ -221,6 +269,7 @@ public class MainWindow extends JFrame {
                             inputText.append(inp.nextLine() + "\n");
                         }
                     } catch (FileNotFoundException fileNotFoundException) {
+                        createStatus.setText("File not found!");
                         fileNotFoundException.printStackTrace();
                     }
                 }
@@ -230,14 +279,34 @@ public class MainWindow extends JFrame {
         this.createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                reset();
                 try{
                     parseInput();
                     drawBoard(tree.getRoot());
                 } catch(BadLocationException e1){
-                    
+                    createStatus.setText("Input format is invalid!");
                 } catch (IndexOutOfBoundsException e1){
-                    
+                    createStatus.setText("Input format is invalid!");
                 }
+            }
+        });
+
+        this.analysisButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AnalysisWindows analysisWindows = new AnalysisWindows(tree);
+                analysisWindows.setVisible(true);
+            }
+        });
+
+        this.resetButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reset();
+                if(tree == null){
+                    tree = new Graph(false);
+                }
+                drawBoard(tree.getRoot());
             }
         });
 
@@ -265,6 +334,9 @@ public class MainWindow extends JFrame {
         for(int i=0; i<4; i++){
             for(int j=0; j<4; j++){
                 raw[i][j] = tiles[i*4+j].getText();
+                if(raw[i][j]=="KOSONG"){
+                    raw[i][j] = "16";
+                }
             }
         }
         if(tree!=null&&Arrays.deepToString(tree.getRoot().getBoard()).equals(Arrays.deepToString(raw))){
@@ -301,6 +373,15 @@ public class MainWindow extends JFrame {
             this.tree = new Graph(raw_inp);
         }
     }
+
+
+    public void reset(){
+        analysisButton.setVisible(false);
+        resetButton.setVisible(false);
+        outStatus.setText("");
+        createStatus.setText("");
+    }
+
 
 
 }
